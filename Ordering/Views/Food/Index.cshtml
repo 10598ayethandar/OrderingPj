@@ -1,0 +1,83 @@
+﻿@model IPagedList<Ordering.Models.Food>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@using PagedList;
+@using PagedList.Mvc;
+
+<body>
+
+    <p>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4">
+                    <b> @Html.ActionLink("Create New", "Create")</b>
+                </div>
+                <div class="col-sm-8">
+                    @using (Html.BeginForm("Index", "Food", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="input-group-right">
+                            @Html.TextBox("search", null, new { placeholder = "Search" })
+                            <span class="input-group-prepend">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </span>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </p>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Food_name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Food_CateId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Food_ImagePath)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Price)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().Quantity)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Food_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Food_CateId)
+                </td>
+                <td>
+                    <img src="@Url.Content(item.Food_ImagePath)" class="img-circle" style="width:60px;height:60px;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Food_id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Food_id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Food_id })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <p>@Html.PagedListPager(Model, page => Url.Action("Index", new { page, search = Request.QueryString["search"] }))</p>
+</body>
+
